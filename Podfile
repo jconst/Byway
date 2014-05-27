@@ -1,4 +1,8 @@
 platform :ios, '7.0'
 
 pod 'AFNetworking'
-pod 'JCModel', :path => '~/Code/JCModel'
+pod 'ReactiveCocoa'
+pod 'Google-Maps-iOS-SDK'
+pod 'ObjectiveSugar'
+pod 'DOSingleton'
+pod 'JCModel'

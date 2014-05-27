@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "JCModel.h"
 
-@interface BWVenue : NSObject
+@interface BWVenue : JCModel
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *category;

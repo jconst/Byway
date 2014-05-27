@@ -7,139 +7,166 @@
 //
 
 #import "BWMainViewController.h"
+#import <ReactiveCocoa.h>
+#import <ObjectiveSugar.h>
 #import "BWAppDelegate.h"
 #import "BWVenueListViewController.h"
 #import "BWPanelViewController.h"
+#import "BWDataStore.h"
+#import "BWAPIManager.h"
 
-#define kMasterViewCenterHidden CGPointMake(160, -55)
+#define kMasterViewCenterHidden CGPointMake(160, -54)
 #define kMasterViewCenterVisible CGPointMake(160, 115)
 
-@implementation BWMainViewController
+@interface BWMainViewController ()
+@property (strong, nonatomic) GMSMarker *startMarker;
+@property (strong, nonatomic) GMSMarker *endMarker;
+@property (strong, nonatomic) NSArray *venueMarkers;
 
-@synthesize mapView, masterContainer, tableContainer, mvc;
+@property (strong, nonatomic) GMSPolyline *routeLine;
+@property (strong, nonatomic) MKPolylineView *routeLineView;
+
+@property (strong, nonatomic) IBOutlet GMSMapView *mapView;
+@property (strong, nonatomic) IBOutlet UIView *panelContainer;
+@property (strong, nonatomic) IBOutlet UIView *tableContainer;
+
+@property (strong, nonatomic) BWVenueListViewController *detailViewController;
+@property (assign, nonatomic) BWPanelViewController *panelViewController;
+
+@end
+
+@implementation BWMainViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    self.mapView.delegate = self;
+
+    self.mapView.myLocationEnabled = YES;
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:self.mapView.myLocation.coordinate
+                                                               zoom:15];
+    [self.mapView animateToCameraPosition:camera];
+    
+    [self setupBindings];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)setupBindings
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    //Update map when start/end locations are set/changed:
+    RACSignal *srcSignal = [[RACObserve(DATASTORE, startLoc) distinctUntilChanged] ignore:nil];
+    RACSignal *dstSignal = [[RACObserve(DATASTORE, endLoc) distinctUntilChanged] ignore:nil];
+    RACSignal *endpointSignal = [RACSignal merge:@[srcSignal, dstSignal]];
+    [endpointSignal subscribeNext:^(CLLocation *newLoc) {
+        //update pins
+        [self updateRouteWithLocation:newLoc];
+    }];
+    
+    RACSignal *midpointSignal = [RACSignal combineLatest:@[srcSignal, dstSignal]
+    reduce:(id)^(CLLocation *src, CLLocation *dst){
+        CLLocation *mid = [[CLLocation alloc] initWithLatitude:(src.coordinate.latitude + dst.coordinate.latitude)/2.0
+                                                     longitude:(src.coordinate.longitude + dst.coordinate.longitude)/2.0];
+        return mid;
+    }];
+    
+    //Until a start/end is set, follow the current location:
+    [[RACObserve(self.mapView, myLocation) takeUntilReplacement:midpointSignal]
+     subscribeNext:^(CLLocation *newLocation) {
+         GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:newLocation.coordinate
+                                                                    zoom:1];
+         [self.mapView animateToCameraPosition:camera];
+     }];
+    
+    [RACSignal combineLatest:@[srcSignal, dstSignal]
+    reduce:(id)^(CLLocation *src, CLLocation *dst) {
+        //get route waypoints
+        [[[BWAPIManager apiManager] routeThroughLocations:@[src, dst]]
+         subscribeNext:^(RACTuple *tuple) {
+             DATASTORE.routeWaypoints = [tuple first];
+             DATASTORE.encoded = [tuple second];
+        }];
+    }];
+    
+    [[RACObserve(DATASTORE, routeWaypoints) ignore:nil] subscribeNext:^(NSArray *waypoints) {
+        [self drawRouteWithWaypoints:waypoints];
+    }];
 }
 
-- (void)loadVenueList:(NSArray *)list {
-    
-    detailViewController.venueList = [list mutableCopy];
-    
-    [self hideMasterView:YES];
-    [detailViewController.tableView reloadData];
+- (void)updateRouteWithLocation:(CLLocation *)loc
+{
+    [self createMapMarkers];
+    if (loc == DATASTORE.startLoc)
+        self.startMarker.position = loc.coordinate;
+    else
+        self.endMarker.position = loc.coordinate;
 }
 
-- (void)hideMasterView:(BOOL)shouldHide {
+- (void)createMapMarkers
+{
+    if (!self.startMarker || !self.endMarker) {
+        self.startMarker = [[GMSMarker alloc] init];
+        self.endMarker = [[GMSMarker alloc] init];
+        [@[self.startMarker, self.endMarker] each:^(GMSMarker *marker) {
+            marker.appearAnimation = kGMSMarkerAnimationPop;
+            marker.map = self.mapView;
+        }];
+    }
+}
+
+- (void)drawRouteWithWaypoints:(NSArray *)waypoints
+{
+    GMSMutablePath *path = [GMSMutablePath path];
+    [waypoints each:^(CLLocation *waypoint) {
+        [path addCoordinate:waypoint.coordinate];
+    }];
+    self.routeLine = [GMSPolyline polylineWithPath:path];
+    self.routeLine.strokeColor = [UIColor blueColor];
+    self.routeLine.strokeWidth = 5.f;
+    self.routeLine.map = self.mapView;
+}
+
+- (void)loadVenueList:(NSArray *)list
+{
+    self.detailViewController.venueList = [list mutableCopy];
+    
+    [self hidePanelView:YES];
+    [self.detailViewController.tableView reloadData];
+}
+
+- (void)hidePanelView:(BOOL)shouldHide
+{
     [UIView animateWithDuration:0.3 animations:^{
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-        masterContainer.center = shouldHide ? kMasterViewCenterHidden : kMasterViewCenterVisible;
+        self.panelContainer.center = shouldHide ? kMasterViewCenterHidden : kMasterViewCenterVisible;
     }];
-    mvc.isHidden = shouldHide;
+    self.panelViewController.offscreen = shouldHide;
 }
 
-- (void)moveMasterViewByDistance:(float)dist {
-    
-    if (masterContainer.center.y + dist > kMasterViewCenterVisible.y) {
-        dist = kMasterViewCenterVisible.y - masterContainer.center.y;
+- (void)movePanelViewByDistance:(float)dist
+{
+    if (self.panelContainer.center.y + dist > kMasterViewCenterVisible.y) {
+        dist = kMasterViewCenterVisible.y - self.panelContainer.center.y;
     }
     
     [UIView animateWithDuration:0.05 animations:^{
-        masterContainer.center = CGPointMake(masterContainer.center.x, masterContainer.center.y + dist);
+        self.panelContainer.center = CGPointMake(self.panelContainer.center.x, self.panelContainer.center.y + dist);
     }];
 }
 
-- (void)masterViewReleased {
-    
+- (void)didUntouchPanelViewThumbButton
+{
     NSInteger threshold = (kMasterViewCenterHidden.y + kMasterViewCenterVisible.y)/2;
     
-    BOOL shouldHide = (masterContainer.center.y <= threshold);
+    BOOL shouldHide = (self.panelContainer.center.y <= threshold);
     
-    [self hideMasterView:shouldHide];
+    [self hidePanelView:shouldHide];
 }
 
-- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id)overlay {
-    
-    MKOverlayView* overlayView = nil;
-    
-    if(overlay == routeLine)
-    {
-        //if we have not yet created an overlay view for this overlay, create it now.
-            routeLineView = [[MKPolylineView alloc] initWithPolyline:routeLine];
-            routeLineView.fillColor = [UIColor redColor];
-            routeLineView.strokeColor = [UIColor redColor];
-            routeLineView.lineWidth = 3;
-        
-        overlayView = routeLineView;
-    }
-    return overlayView;
-}
-
-- (void)drawRouteWithWaypoints:(NSArray *)waypoints {
-        
-    [self.mapView removeOverlays:mapView.overlays];
-    
-    //Zoom
-    [self.mapView setRegion:[self regionFromLocations:waypoints] animated:YES];
-    
-    MKMapPoint *pointArr = malloc(sizeof(MKMapPoint) * waypoints.count);
-    
-    //Draw polyline    
-    for (int i = 0; i < waypoints.count; i++) {
-        CLLocation *loc = [waypoints objectAtIndex:i];
-        CLLocationCoordinate2D coord = loc.coordinate;
-        
-        MKMapPoint point = MKMapPointForCoordinate(coord);
-        
-        pointArr[i] = point;
-    }
-    
-    routeLine = [MKPolyline polylineWithPoints:pointArr count:waypoints.count];
-    
-    [self.mapView addOverlay:routeLine];
-    
-    free(pointArr);
-}
-
-- (MKCoordinateRegion)regionFromLocations:(NSArray *)locations {
-    CLLocationCoordinate2D upper = [[locations objectAtIndex:0] coordinate];
-    CLLocationCoordinate2D lower = [[locations objectAtIndex:0] coordinate];
-    
-    // FIND LIMITS
-    for(CLLocation *eachLocation in locations) {
-        if([eachLocation coordinate].latitude > upper.latitude) upper.latitude = [eachLocation coordinate].latitude;
-        if([eachLocation coordinate].latitude < lower.latitude) lower.latitude = [eachLocation coordinate].latitude;
-        if([eachLocation coordinate].longitude > upper.longitude) upper.longitude = [eachLocation coordinate].longitude;
-        if([eachLocation coordinate].longitude < lower.longitude) lower.longitude = [eachLocation coordinate].longitude;
-    }
-    
-    // FIND REGION
-    MKCoordinateSpan locationSpan;
-    locationSpan.latitudeDelta = upper.latitude - lower.latitude;
-    locationSpan.longitudeDelta = upper.longitude - lower.longitude;
-    CLLocationCoordinate2D locationCenter;
-    locationCenter.latitude = (upper.latitude + lower.latitude) / 2;
-    locationCenter.longitude = (upper.longitude + lower.longitude) / 2;
-    
-    MKCoordinateRegion region = MKCoordinateRegionMake(locationCenter, locationSpan);
-    return region;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     if ([segue.identifier isEqualToString:@"embedDetail"]) {
-        detailViewController = (BWVenueListViewController *)segue.destinationViewController;
-        detailViewController.delegate = self;
+        self.detailViewController = (BWVenueListViewController *)segue.destinationViewController;
+        self.detailViewController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"embedMaster"]) {
-        mvc = (BWPanelViewController *)segue.destinationViewController;
+        self.panelViewController = (BWPanelViewController *)segue.destinationViewController;
     }
 }
 

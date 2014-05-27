@@ -8,25 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @class BWVenueListViewController, BWPanelViewController;
 
-@interface BWMainViewController : UIViewController <MKMapViewDelegate> {
-    MKPolyline *routeLine;
-    MKPolylineView *routeLineView;
-    
-    BWVenueListViewController *detailViewController;
-}
+@interface BWMainViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) IBOutlet UIView *masterContainer;
-@property (strong, nonatomic) IBOutlet UIView *tableContainer;
-@property (nonatomic) BWPanelViewController *mvc;
-
-- (void)drawRouteWithWaypoints:(NSArray *)waypoints;
 - (void)loadVenueList:(NSArray *)list;
-- (void)hideMasterView:(BOOL)shouldHide;
-- (void)moveMasterViewByDistance:(float)dist;
-- (void)masterViewReleased;
+- (void)hidePanelView:(BOOL)shouldHide;
+- (void)movePanelViewByDistance:(float)dist;
+- (void)didUntouchPanelViewThumbButton;
 
 @end

@@ -10,18 +10,21 @@
 #import "BWVenue.h"
 #import "BWMainViewController.h"
 #import "BWPanelViewController.h"
-#import "BWMapHelper.h"
 #import "BWAppDelegate.h"
 
 @implementation BWVenueListViewController
-
-@synthesize venueList, delegate;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [self.tableView setSeparatorColor:[UIColor colorWithRed:0.729 green:0.596 blue:0.0509 alpha:1.0]];
+}
+
+- (void)setVenueList:(NSMutableArray *)venueList
+{
+    _venueList = venueList;
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -35,7 +38,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return venueList.count;
+    return self.venueList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -44,15 +47,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    BWVenue *venue = [venueList objectAtIndex:indexPath.row];
+    BWVenue *venue = [self.venueList objectAtIndex:indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"%d. %@", indexPath.row+1, [venue name]];
     cell.detailTextLabel.text = [venue category];
     
-    if (indexPath.row < delegate.mvc.mapHelper.pins.count) {
-        MKPointAnnotation *pin = [delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row];
-        pin.title = cell.textLabel.text;
-        pin.subtitle = cell.detailTextLabel.text;
-    }
+//    if (indexPath.row < delegate.mvc.mapHelper.pins.count) {
+//        MKPointAnnotation *pin = [delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row];
+//        pin.title = cell.textLabel.text;
+//        pin.subtitle = cell.detailTextLabel.text;
+//    }
     
     return cell;
 }
@@ -68,15 +71,15 @@
         // Delete the row from the data source
         NSLog(@"index path: %@", indexPath);
         
-        [venueList removeObjectAtIndex:indexPath.row];
+        [self.venueList removeObjectAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        [delegate.mapView removeAnnotation:[delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row]];
-        [delegate.mvc.mapHelper.pins removeObjectAtIndex:indexPath.row];
-        NSLog(@"pins: %@", delegate.mvc.mapHelper.pins);
-        [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.3];
-    }  
+//        [delegate.mapView removeAnnotation:[delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row]];
+//        [delegate.mvc.mapHelper.pins removeObjectAtIndex:indexPath.row];
+//        NSLog(@"pins: %@", delegate.mvc.mapHelper.pins);
+//        [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.3];
+    }
 }
 
 
@@ -93,13 +96,13 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    MKPointAnnotation *pin = [delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row];
-    
-    [[delegate.mapView viewForAnnotation:pin] setCanShowCallout:YES];
-    
-    [delegate.mapView selectAnnotation:pin animated:YES];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    MKPointAnnotation *pin = [delegate.mvc.mapHelper.pins objectAtIndex:indexPath.row];
+//    
+//    [[delegate.mapView viewForAnnotation:pin] setCanShowCallout:YES];
+//    
+//    [delegate.mapView selectAnnotation:pin animated:YES];
 }
 
 @end

@@ -8,12 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		5F0C309D1617ACDF0098F2B8 /* BWVenueListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C309C1617ACDF0098F2B8 /* BWVenueListViewController.m */; };
-		5F0C30A01617B0100098F2B8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0C309F1617B0100098F2B8 /* MapKit.framework */; };
 		5F0C30A61617BFE30098F2B8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0C30A51617BFE30098F2B8 /* CoreLocation.framework */; };
 		5F0C30A91617C71A0098F2B8 /* BWMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C30A81617C71A0098F2B8 /* BWMainViewController.m */; };
-		5F0C30AC1617CAA20098F2B8 /* BWMapHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C30AB1617CAA20098F2B8 /* BWMapHelper.m */; };
 		5F0C359B161812E40098F2B8 /* BWVenue.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C359A161812E40098F2B8 /* BWVenue.m */; };
 		5F3D3E211896C65E00023B86 /* BWAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F3D3E201896C65E00023B86 /* BWAPIManager.m */; };
+		5F3D3E2818981C6D00023B86 /* BWDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F3D3E2718981C6D00023B86 /* BWDataStore.m */; };
+		5F3D3E2A189827E300023B86 /* secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F3D3E29189827E300023B86 /* secrets.plist */; };
+		5F3D3E2E189829B200023B86 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E2D189829B200023B86 /* AVFoundation.framework */; };
+		5F3D3E34189829F700023B86 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E33189829F700023B86 /* ImageIO.framework */; };
+		5F3D3E3618982A0200023B86 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3518982A0200023B86 /* libc++.dylib */; };
+		5F3D3E3818982A0D00023B86 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3718982A0D00023B86 /* libicucore.dylib */; };
+		5F3D3E3A18982A1600023B86 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3918982A1600023B86 /* libz.dylib */; };
+		5F3D3E3E18982A2500023B86 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3D18982A2500023B86 /* QuartzCore.framework */; };
+		5F3D3E4018982A2A00023B86 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3F18982A2A00023B86 /* SystemConfiguration.framework */; };
 		5F50BAC5164CB0D400C77378 /* shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F50BAC4164CB0D400C77378 /* shadow.png */; };
 		5F9A25961617A13A00925309 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9A25951617A13A00925309 /* UIKit.framework */; };
 		5F9A25981617A13A00925309 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9A25971617A13A00925309 /* Foundation.framework */; };
@@ -47,16 +54,23 @@
 		09BAE0290A534C9098F25F00 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		5F0C309B1617ACDF0098F2B8 /* BWVenueListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWVenueListViewController.h; sourceTree = "<group>"; };
 		5F0C309C1617ACDF0098F2B8 /* BWVenueListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWVenueListViewController.m; sourceTree = "<group>"; };
-		5F0C309F1617B0100098F2B8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		5F0C30A51617BFE30098F2B8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5F0C30A71617C71A0098F2B8 /* BWMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWMainViewController.h; sourceTree = "<group>"; };
 		5F0C30A81617C71A0098F2B8 /* BWMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWMainViewController.m; sourceTree = "<group>"; };
-		5F0C30AA1617CAA20098F2B8 /* BWMapHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWMapHelper.h; sourceTree = "<group>"; };
-		5F0C30AB1617CAA20098F2B8 /* BWMapHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWMapHelper.m; sourceTree = "<group>"; };
 		5F0C3599161812E40098F2B8 /* BWVenue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWVenue.h; sourceTree = "<group>"; };
 		5F0C359A161812E40098F2B8 /* BWVenue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWVenue.m; sourceTree = "<group>"; };
 		5F3D3E1F1896C65E00023B86 /* BWAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWAPIManager.h; sourceTree = "<group>"; };
 		5F3D3E201896C65E00023B86 /* BWAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWAPIManager.m; sourceTree = "<group>"; };
+		5F3D3E2618981C6D00023B86 /* BWDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BWDataStore.h; sourceTree = "<group>"; };
+		5F3D3E2718981C6D00023B86 /* BWDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BWDataStore.m; sourceTree = "<group>"; };
+		5F3D3E29189827E300023B86 /* secrets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = secrets.plist; sourceTree = "<group>"; };
+		5F3D3E2D189829B200023B86 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5F3D3E33189829F700023B86 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		5F3D3E3518982A0200023B86 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		5F3D3E3718982A0D00023B86 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		5F3D3E3918982A1600023B86 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		5F3D3E3D18982A2500023B86 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5F3D3E3F18982A2A00023B86 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		5F50BAC4164CB0D400C77378 /* shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow.png; sourceTree = "<group>"; };
 		5F9A25911617A13A00925309 /* Byway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Byway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F9A25951617A13A00925309 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -96,11 +110,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F3D3E4018982A2A00023B86 /* SystemConfiguration.framework in Frameworks */,
+				5F3D3E3E18982A2500023B86 /* QuartzCore.framework in Frameworks */,
+				5F3D3E3A18982A1600023B86 /* libz.dylib in Frameworks */,
+				5F3D3E3818982A0D00023B86 /* libicucore.dylib in Frameworks */,
+				5F3D3E3618982A0200023B86 /* libc++.dylib in Frameworks */,
+				5F3D3E34189829F700023B86 /* ImageIO.framework in Frameworks */,
+				5F9A259A1617A13A00925309 /* CoreGraphics.framework in Frameworks */,
+				5F3D3E2E189829B200023B86 /* AVFoundation.framework in Frameworks */,
 				5F0C30A61617BFE30098F2B8 /* CoreLocation.framework in Frameworks */,
-				5F0C30A01617B0100098F2B8 /* MapKit.framework in Frameworks */,
 				5F9A25961617A13A00925309 /* UIKit.framework in Frameworks */,
 				5F9A25981617A13A00925309 /* Foundation.framework in Frameworks */,
-				5F9A259A1617A13A00925309 /* CoreGraphics.framework in Frameworks */,
 				D30B2DD6D8204F7BA968596C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,7 +131,9 @@
 		5F0C30951617A4610098F2B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5FF0CCF9188A470C007B2F97 /* Images.xcassets */,
 				5F9A25AD1617A13A00925309 /* MainStoryboard.storyboard */,
+				5F3D3E29189827E300023B86 /* secrets.plist */,
 			);
 			name = Resources;
 			path = Byway;
@@ -122,8 +144,8 @@
 			children = (
 				5F3D3E1F1896C65E00023B86 /* BWAPIManager.h */,
 				5F3D3E201896C65E00023B86 /* BWAPIManager.m */,
-				5F0C30AA1617CAA20098F2B8 /* BWMapHelper.h */,
-				5F0C30AB1617CAA20098F2B8 /* BWMapHelper.m */,
+				5F3D3E2618981C6D00023B86 /* BWDataStore.h */,
+				5F3D3E2718981C6D00023B86 /* BWDataStore.m */,
 				5F0C3599161812E40098F2B8 /* BWVenue.h */,
 				5F0C359A161812E40098F2B8 /* BWVenue.m */,
 			);
@@ -166,10 +188,16 @@
 		5F9A25941617A13A00925309 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F3D3E3F18982A2A00023B86 /* SystemConfiguration.framework */,
+				5F3D3E3D18982A2500023B86 /* QuartzCore.framework */,
+				5F3D3E3918982A1600023B86 /* libz.dylib */,
+				5F3D3E3718982A0D00023B86 /* libicucore.dylib */,
+				5F3D3E3518982A0200023B86 /* libc++.dylib */,
+				5F3D3E33189829F700023B86 /* ImageIO.framework */,
+				5F3D3E2D189829B200023B86 /* AVFoundation.framework */,
 				5F0C30A51617BFE30098F2B8 /* CoreLocation.framework */,
 				5F9A25951617A13A00925309 /* UIKit.framework */,
 				5F9A25971617A13A00925309 /* Foundation.framework */,
-				5F0C309F1617B0100098F2B8 /* MapKit.framework */,
 				5F9A25991617A13A00925309 /* CoreGraphics.framework */,
 				A1A79A7736BF4A5A9B55FD1B /* libPods.a */,
 			);
@@ -183,7 +211,6 @@
 				5F3D3E221896DC1500023B86 /* Model */,
 				5F9A25A41617A13A00925309 /* BWAppDelegate.h */,
 				5F9A25A51617A13A00925309 /* BWAppDelegate.m */,
-				5FF0CCF9188A470C007B2F97 /* Images.xcassets */,
 			);
 			path = Byway;
 			sourceTree = "<group>";
@@ -284,6 +311,7 @@
 				94342F4B1617DA54009D22FF /* sliderMax@2x.png in Resources */,
 				94342F4D1617DC15009D22FF /* main@2x.png in Resources */,
 				94342F541617E21E009D22FF /* handle@2x.png in Resources */,
+				5F3D3E2A189827E300023B86 /* secrets.plist in Resources */,
 				94342F7916181157009D22FF /* Icon-72.png in Resources */,
 				94342F7A16181157009D22FF /* Icon-72@2x.png in Resources */,
 				94342F7B16181157009D22FF /* Icon.png in Resources */,
@@ -345,8 +373,8 @@
 				5F0C309D1617ACDF0098F2B8 /* BWVenueListViewController.m in Sources */,
 				5F3D3E211896C65E00023B86 /* BWAPIManager.m in Sources */,
 				5F0C30A91617C71A0098F2B8 /* BWMainViewController.m in Sources */,
-				5F0C30AC1617CAA20098F2B8 /* BWMapHelper.m in Sources */,
 				5F0C359B161812E40098F2B8 /* BWVenue.m in Sources */,
+				5F3D3E2818981C6D00023B86 /* BWDataStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +463,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/josephconstan/Code/Byway/iOS/Byway,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Byway/Byway-Prefix.pch";
 				INFOPLIST_FILE = "Byway/Byway-Info.plist";
@@ -454,6 +486,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/josephconstan/Code/Byway/iOS/Byway,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Byway/Byway-Prefix.pch";
 				INFOPLIST_FILE = "Byway/Byway-Info.plist";

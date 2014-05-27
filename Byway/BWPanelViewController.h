@@ -11,33 +11,14 @@
 
 @class BWMainViewController, BWMapHelper;
 
-@interface BWPanelViewController : UIViewController <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate> {
-    CLGeocoder *geocoder;
-    
-    MKPlacemark *startLoc;
-    MKPlacemark *endLoc;
-    
-    
-    NSArray *waypoints;
-    BWMainViewController *initialViewController;
-    NSMutableArray *venues;
-    NSMutableDictionary *venuesDict;
-    
-    NSInteger maxDistance;
-    NSInteger maxLikes;
-    NSString *category;
-}
-- (IBAction) thumbButtonDragged:(id) sender withEvent:(UIEvent *) event;
+@interface BWPanelViewController : UIViewController <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+
+- (IBAction)thumbButtonDragged:(id)sender withEvent:(UIEvent *) event;
 - (IBAction)touchedAnywhere;
-- (IBAction)hideKeyboard;
-- (IBAction)goPressed:(id)sender;
+- (IBAction)didTapGo:(id)sender;
 
 - (IBAction)showCategories:(id)sender;
 
-@property (strong, nonatomic) IBOutlet UIPickerView *picker;
-@property (strong, nonatomic) IBOutlet UISlider *slider;
-@property (strong, nonatomic) BWMapHelper *mapHelper;
-
-@property (nonatomic) BOOL isHidden;
+@property (nonatomic, getter = isOffscreen) BOOL offscreen;
 
 @end
