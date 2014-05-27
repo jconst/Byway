@@ -123,7 +123,7 @@
         
     [venues removeAllObjects];
     
-    [[BWAPIManager apiManager] geocodeSearchString:textField.text
+    [BWAPIManager geocodeSearchString:textField.text
     completion:^(CLLocation *loc, NSString *address, NSError *error) {
         
         textField.text = address;

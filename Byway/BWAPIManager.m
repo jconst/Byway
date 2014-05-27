@@ -28,9 +28,9 @@
     return apiManager;
 }
 
-- (void)geocodeSearchString:(NSString *)search completion:(void (^)(CLLocation *loc, NSString *address, NSError *error))comp
++ (void)geocodeSearchString:(NSString *)search completion:(void (^)(CLLocation *loc, NSString *address, NSError *error))comp
 {
-    [self GET:@"geocode" parameters:@{@"q": search}
+    [[self apiManager] GET:@"geocode" parameters:@{@"q": search}
     success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
        
         CLLocation *loc = [[CLLocation alloc] initWithLatitude:[response[@"coords"][@"lat"] doubleValue]
@@ -43,42 +43,44 @@
     }];
 }
 
-- (RACSignal *)routeThroughLocations:(NSArray *)locations
++ (RACSignal *)routeThroughLocations:(RACSignal *)locationsSignal
 {
-    NSArray *locStrings = [locations map:^(CLLocation *location) {
-        return [NSString stringWithFormat:@"%f,%f", location.coordinate.latitude, location.coordinate.longitude];
-    }];
-    
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        
-        NSDictionary *params = @{@"waypoints": [locStrings join:@"|"]};
-        AFHTTPRequestOperation *op = [self GET:@"route" parameters:params
-        success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
-
-            NSArray *waypoints = [response[@"polyline"] map:^id(NSDictionary *coord) {
-               return [[CLLocation alloc] initWithLatitude:[coord[@"lat"] doubleValue]
-                                                 longitude:[coord[@"lng"] doubleValue]];
+        __block AFHTTPRequestOperation *op;
+        [locationsSignal subscribeNext:^(NSArray *locations) {
+            
+            NSArray *locStrings = [locations map:^(CLLocation *location) {
+                return [NSString stringWithFormat:@"%f,%f", location.coordinate.latitude, location.coordinate.longitude];
             }];
-            [subscriber sendNext:RACTuplePack(waypoints, response[@"encoded"])];
-            [subscriber sendCompleted];
-
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [subscriber sendError:error];
+            
+            NSDictionary *params = @{@"waypoints": [locStrings join:@"|"]};
+            op = [[self apiManager] GET:@"route" parameters:params
+            success:^(AFHTTPRequestOperation *operation, NSDictionary *response) {
+               
+               NSArray *waypoints = [response[@"polyline"] map:^id(NSDictionary *coord) {
+                   return [[CLLocation alloc] initWithLatitude:[coord[@"lat"] doubleValue]
+                                                     longitude:[coord[@"lng"] doubleValue]];
+               }];
+               [subscriber sendNext:RACTuplePack(waypoints, response[@"encoded"])];
+               [subscriber sendCompleted];
+               
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+               [subscriber sendError:error];
+            }];
         }];
-        
         return [RACDisposable disposableWithBlock:^{
             [op cancel];
         }];
     }];
 }
 
-- (void)getVenuesAlongPolyline:(NSString *)encoded
++ (void)getVenuesAlongPolyline:(NSString *)encoded
                       category:(NSString *)category
                     completion:(void (^)(NSArray *venues, NSError *error))comp
 {
     NSDictionary *params = @{@"category": category,
                              @"polyline": encoded};
-    [self GET:@"venues" parameters:params
+    [[self apiManager] GET:@"venues" parameters:params
     success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"resp: %@", responseObject);
         if (comp) comp(nil, nil);

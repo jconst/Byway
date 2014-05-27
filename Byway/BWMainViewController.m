@@ -42,11 +42,21 @@
     [super viewDidLoad];
 
     self.mapView.myLocationEnabled = YES;
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:self.mapView.myLocation.coordinate
-                                                               zoom:15];
-    [self.mapView animateToCameraPosition:camera];
     
+    [self createMapMarkers];
     [self setupBindings];
+}
+
+- (void)createMapMarkers
+{
+    self.startMarker = [GMSMarker new];
+    self.endMarker = [GMSMarker new];
+    self.startMarker.icon = [GMSMarker markerImageWithColor:[UIColor colorWithRed:0.322 green:0.588 blue:0.718 alpha:1.000]];
+    self.endMarker.icon = [GMSMarker markerImageWithColor:[UIColor colorWithRed:0.474 green:0.718 blue:0.408 alpha:1.000]];
+    [@[self.startMarker, self.endMarker] each:^(GMSMarker *marker) {
+        marker.appearAnimation = kGMSMarkerAnimationPop;
+        marker.map = self.mapView;
+    }];
 }
 
 - (void)setupBindings
@@ -54,10 +64,11 @@
     //Update map when start/end locations are set/changed:
     RACSignal *srcSignal = [[RACObserve(DATASTORE, startLoc) distinctUntilChanged] ignore:nil];
     RACSignal *dstSignal = [[RACObserve(DATASTORE, endLoc) distinctUntilChanged] ignore:nil];
-    RACSignal *endpointSignal = [RACSignal merge:@[srcSignal, dstSignal]];
-    [endpointSignal subscribeNext:^(CLLocation *newLoc) {
-        //update pins
-        [self updateRouteWithLocation:newLoc];
+    [srcSignal subscribeNext:^(CLLocation *newLoc) {
+        self.startMarker.position = newLoc.coordinate;
+    }];
+    [dstSignal subscribeNext:^(CLLocation *newLoc) {
+        self.endMarker.position = newLoc.coordinate;
     }];
     
     RACSignal *midpointSignal = [RACSignal combineLatest:@[srcSignal, dstSignal]
@@ -75,40 +86,19 @@
          [self.mapView animateToCameraPosition:camera];
      }];
     
-    [RACSignal combineLatest:@[srcSignal, dstSignal]
-    reduce:(id)^(CLLocation *src, CLLocation *dst) {
-        //get route waypoints
-        [[[BWAPIManager apiManager] routeThroughLocations:@[src, dst]]
-         subscribeNext:^(RACTuple *tuple) {
-             DATASTORE.routeWaypoints = [tuple first];
-             DATASTORE.encoded = [tuple second];
-        }];
+    RACSignal *endpointsSignal = [RACSignal combineLatest:@[srcSignal, dstSignal]
+    reduce:(id)^(CLLocation *src, CLLocation *dst){
+        return @[src, dst];
     }];
+    [[BWAPIManager routeThroughLocations:endpointsSignal]
+     subscribeNext:^(RACTuple *tuple) {
+         DATASTORE.routeWaypoints = [tuple first];
+         DATASTORE.encoded = [tuple second];
+     }];
     
     [[RACObserve(DATASTORE, routeWaypoints) ignore:nil] subscribeNext:^(NSArray *waypoints) {
         [self drawRouteWithWaypoints:waypoints];
     }];
-}
-
-- (void)updateRouteWithLocation:(CLLocation *)loc
-{
-    [self createMapMarkers];
-    if (loc == DATASTORE.startLoc)
-        self.startMarker.position = loc.coordinate;
-    else
-        self.endMarker.position = loc.coordinate;
-}
-
-- (void)createMapMarkers
-{
-    if (!self.startMarker || !self.endMarker) {
-        self.startMarker = [[GMSMarker alloc] init];
-        self.endMarker = [[GMSMarker alloc] init];
-        [@[self.startMarker, self.endMarker] each:^(GMSMarker *marker) {
-            marker.appearAnimation = kGMSMarkerAnimationPop;
-            marker.map = self.mapView;
-        }];
-    }
 }
 
 - (void)drawRouteWithWaypoints:(NSArray *)waypoints
@@ -121,6 +111,7 @@
     self.routeLine.strokeColor = [UIColor blueColor];
     self.routeLine.strokeWidth = 5.f;
     self.routeLine.map = self.mapView;
+    [self.mapView setNeedsDisplay];
 }
 
 - (void)loadVenueList:(NSArray *)list

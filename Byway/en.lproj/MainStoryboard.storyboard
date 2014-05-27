@@ -139,7 +139,7 @@
                     <connections>
                         <outlet property="endField" destination="Rzw-jb-Sdm" id="aAR-tl-joT"/>
                         <outlet property="slider" destination="HAA-G4-pxv" id="kyZ-PX-8o0"/>
-                        <outlet property="startField" destination="Rzw-jb-Sdm" id="CQo-59-vvK"/>
+                        <outlet property="startField" destination="Ohk-Gy-gzK" id="hNh-9g-ILM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ctX-a7-c6e" userLabel="First Responder" sceneMemberID="firstResponder"/>

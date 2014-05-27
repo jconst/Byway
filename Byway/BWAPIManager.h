@@ -13,10 +13,10 @@
 
 + (instancetype)apiManager;
 
-- (void)geocodeSearchString:(NSString *)search
++ (void)geocodeSearchString:(NSString *)search
                  completion:(void (^)(CLLocation *loc, NSString *address, NSError *error))comp;
-- (RACSignal *)routeThroughLocations:(NSArray *)locations;
-- (void)getVenuesAlongPolyline:(NSString *)encoded
++ (RACSignal *)routeThroughLocations:(RACSignal *)locationsSignal;
++ (void)getVenuesAlongPolyline:(NSString *)encoded
                       category:(NSString *)category
                     completion:(void (^)(NSArray *venues, NSError *error))comp;
 @end
