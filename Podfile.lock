@@ -17,6 +17,9 @@ PODS:
   - AFNetworking/Serialization (2.1.0)
   - AFNetworking/UIKit (2.1.0):
     - AFNetworking/NSURLConnection
+  - AFNetworking2-RACExtensions (0.0.1):
+    - AFNetworking (~> 2.0)
+    - ReactiveCocoa (~> 2.0)
   - DOSingleton (0.0.2)
   - Google-Maps-iOS-SDK (1.8.0)
   - JCModel (0.2):
@@ -40,6 +43,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - AFNetworking2-RACExtensions
   - DOSingleton
   - Google-Maps-iOS-SDK
   - JCModel
@@ -47,12 +51,13 @@ DEPENDENCIES:
   - ReactiveCocoa
 
 SPEC CHECKSUMS:
-  AFNetworking: c7d7901a83f631414c7eda1737261f696101a5cd
-  DOSingleton: fa1f4c47eb0f3e2c5475d9726f719e9309ee9e97
-  Google-Maps-iOS-SDK: 44dfecaff59ba741b3b5a67508a59a3fe2683f7f
-  JCModel: 285ce87d41371ff169dcd1a47dca73c2b8704e92
-  NSObjectProperties: 3be6022a376b7bab8cecd12138063e51cb5e9f05
-  ObjectiveSugar: fed588577bcf9733546aeaa089de444e4bab9a52
-  ReactiveCocoa: b3cb6ebd50f1a0f2e39c6fd7ce3c428b6efcb22b
+  AFNetworking: 7c33510b46f994bc75b75c6e63c1d83414ca40f2
+  AFNetworking2-RACExtensions: 38ac068ed0257ca0a11f380bfd8375023c1cbe57
+  DOSingleton: ff0733dbe84672dbb30c1b294141c27d49056a71
+  Google-Maps-iOS-SDK: ff60d249706b07c7e0af4561894ff835e1bd3283
+  JCModel: 7fe944e57a177ddfa5d0ad02266d477e2d500bd7
+  NSObjectProperties: 2f975d8ccdc844a27830c55ce7b4a0fa766e2b01
+  ObjectiveSugar: f48793f5902c77cfc02a4ce46d2e8ecddcad4dc2
+  ReactiveCocoa: b751b6d1df73688da1040a3cd5b068765ec118d4
 
 COCOAPODS: 0.32.1

@@ -27,7 +27,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *startField;
 @property (strong, nonatomic) IBOutlet UITextField *endField;
 @property (strong, nonatomic) IBOutlet UISlider *slider;
-@property (strong, nonatomic) IBOutlet UIPickerView *picker;
 
 @end
 
@@ -39,51 +38,10 @@
 
     self.mainViewController = (BWMainViewController *)[[APPDELEGATE window] rootViewController];
     venues = [NSMutableArray array];
-    category = @"topPicks";
-}
-
-- (IBAction)showCategories:(id)sender
-{
-    self.picker.hidden = NO;
-
-    [UIView animateWithDuration:0.3 animations:^{
-        self.picker.alpha = 1;
-    }];
-}
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    static NSArray *categories = nil;
-    if (!categories)
-        categories = @[@"food", @"drinks", @"coffee", @"shops", @"arts", @"outdoors",
-                       @"sights", @"trending", @"specials", @"top picks"];
     
-    return categories[row];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    category = [self pickerView:pickerView titleForRow:row forComponent:0];
-    
-    if ([category isEqualToString:@"top picks"]) {
-        category = @"topPicks";
-    }
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        self.picker.alpha = 0;
-    } completion:^(BOOL finished) {
-        self.picker.hidden = YES;
-    }];
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return 10;
-}
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
+    self.categoryBar.backgroundColor = [UIColor clearColor];
+    self.categoryBar.titles = @[@"top picks", @"food", @"drinks", @"coffee", @"shops", @"arts",
+                                @"outdoors", @"sights", @"trending", @"specials"];
 }
 
 - (IBAction) thumbButtonDragged:(id)sender withEvent:(UIEvent *) event
@@ -99,7 +57,7 @@
     [self.mainViewController movePanelViewByDistance:dist];
 }
 
-- (IBAction) thumbButtonReleased:(id) sender withEvent:(UIEvent *) event
+- (IBAction)thumbButtonReleased:(id) sender withEvent:(UIEvent *) event
 {
     [self.mainViewController didUntouchPanelViewThumbButton];
 }
@@ -167,6 +125,11 @@
     [self hideKeyboard];
 
     [self.mainViewController hidePanelView:YES];
+    
+    [[BWAPIManager venuesAlongPolyline:DATASTORE.encoded inCategories:self.categoryBar.selectedTitles]
+     subscribeNext:^(NSArray *venues) {
+         venues.
+     }];
 //    if (!startLoc) {
 //        [self textFieldDidEndEditing:(UITextField *)[self.view viewWithTag:1]];
 //    }

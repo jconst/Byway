@@ -74,19 +74,25 @@
     }];
 }
 
-+ (void)getVenuesAlongPolyline:(NSString *)encoded
-                      category:(NSString *)category
-                    completion:(void (^)(NSArray *venues, NSError *error))comp
++ (RACSignal *)venuesAlongPolyline:(NSString *)encoded
+                      inCategories:(NSArray *)categories
 {
-    NSDictionary *params = @{@"category": category,
-                             @"polyline": encoded};
-    [[self apiManager] GET:@"venues" parameters:params
-    success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"resp: %@", responseObject);
-        if (comp) comp(nil, nil);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSDictionary *params = @{@"category": categories[0],
+                                 @"polyline": encoded};
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (comp) comp(nil, error);
+        AFHTTPRequestOperation *op = [[self apiManager] GET:@"venues" parameters:params
+        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"resp: %@", responseObject);
+            [subscriber sendNext:responseObject];
+            [subscriber sendCompleted];
+           
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [subscriber sendError:error];
+        }];
+        return [RACDisposable disposableWithBlock:^{
+            [op cancel];
+        }];
     }];
 }
 

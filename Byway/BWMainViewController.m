@@ -51,7 +51,7 @@
 {
     self.startMarker = [GMSMarker new];
     self.endMarker = [GMSMarker new];
-    self.startMarker.icon = [GMSMarker markerImageWithColor:[UIColor colorWithRed:0.322 green:0.588 blue:0.718 alpha:1.000]];
+//    self.startMarker.icon = [GMSMarker markerImageWithColor:[UIColor colorWithRed:0.322 green:0.588 blue:0.718 alpha:1.000]];
     self.endMarker.icon = [GMSMarker markerImageWithColor:[UIColor colorWithRed:0.474 green:0.718 blue:0.408 alpha:1.000]];
     [@[self.startMarker, self.endMarker] each:^(GMSMarker *marker) {
         marker.appearAnimation = kGMSMarkerAnimationPop;

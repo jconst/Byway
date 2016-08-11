@@ -16,7 +16,6 @@
 + (void)geocodeSearchString:(NSString *)search
                  completion:(void (^)(CLLocation *loc, NSString *address, NSError *error))comp;
 + (RACSignal *)routeThroughLocations:(RACSignal *)locationsSignal;
-+ (void)getVenuesAlongPolyline:(NSString *)encoded
-                      category:(NSString *)category
-                    completion:(void (^)(NSArray *venues, NSError *error))comp;
++ (RACSignal *)venuesAlongPolyline:(NSString *)encoded
+                      inCategories:(NSArray *)categories;
 @end

@@ -22,6 +22,8 @@
 		5F3D3E3E18982A2500023B86 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3D18982A2500023B86 /* QuartzCore.framework */; };
 		5F3D3E4018982A2A00023B86 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3D3E3F18982A2A00023B86 /* SystemConfiguration.framework */; };
 		5F50BAC5164CB0D400C77378 /* shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F50BAC4164CB0D400C77378 /* shadow.png */; };
+		5F56FE661935917400C99CD9 /* JCButtonBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F56FE651935917400C99CD9 /* JCButtonBar.m */; };
+		5F56FE6A1936E0F300C99CD9 /* UIView+FrameAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F56FE691936E0F300C99CD9 /* UIView+FrameAccessor.m */; };
 		5F9A25961617A13A00925309 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9A25951617A13A00925309 /* UIKit.framework */; };
 		5F9A25981617A13A00925309 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9A25971617A13A00925309 /* Foundation.framework */; };
 		5F9A259A1617A13A00925309 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9A25991617A13A00925309 /* CoreGraphics.framework */; };
@@ -72,6 +74,10 @@
 		5F3D3E3D18982A2500023B86 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5F3D3E3F18982A2A00023B86 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		5F50BAC4164CB0D400C77378 /* shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow.png; sourceTree = "<group>"; };
+		5F56FE641935917400C99CD9 /* JCButtonBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCButtonBar.h; sourceTree = "<group>"; };
+		5F56FE651935917400C99CD9 /* JCButtonBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCButtonBar.m; sourceTree = "<group>"; };
+		5F56FE681936E0F300C99CD9 /* UIView+FrameAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+FrameAccessor.h"; sourceTree = "<group>"; };
+		5F56FE691936E0F300C99CD9 /* UIView+FrameAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+FrameAccessor.m"; sourceTree = "<group>"; };
 		5F9A25911617A13A00925309 /* Byway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Byway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F9A25951617A13A00925309 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		5F9A25971617A13A00925309 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -159,10 +165,21 @@
 				5F0C30A81617C71A0098F2B8 /* BWMainViewController.m */,
 				5F9A25B01617A13A00925309 /* BWPanelViewController.h */,
 				5F9A25B11617A13A00925309 /* BWPanelViewController.m */,
+				5F56FE641935917400C99CD9 /* JCButtonBar.h */,
+				5F56FE651935917400C99CD9 /* JCButtonBar.m */,
 				5F0C309B1617ACDF0098F2B8 /* BWVenueListViewController.h */,
 				5F0C309C1617ACDF0098F2B8 /* BWVenueListViewController.m */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		5F56FE671936E0F300C99CD9 /* FrameAccessor */ = {
+			isa = PBXGroup;
+			children = (
+				5F56FE681936E0F300C99CD9 /* UIView+FrameAccessor.h */,
+				5F56FE691936E0F300C99CD9 /* UIView+FrameAccessor.m */,
+			);
+			path = FrameAccessor;
 			sourceTree = "<group>";
 		};
 		5F9A25861617A13A00925309 = {
@@ -207,6 +224,7 @@
 		5F9A259B1617A13A00925309 /* Byway */ = {
 			isa = PBXGroup;
 			children = (
+				5F56FE671936E0F300C99CD9 /* FrameAccessor */,
 				5F3D3E231896DC2C00023B86 /* View Controllers */,
 				5F3D3E221896DC1500023B86 /* Model */,
 				5F9A25A41617A13A00925309 /* BWAppDelegate.h */,
@@ -372,6 +390,8 @@
 				5F9A25B21617A13A00925309 /* BWPanelViewController.m in Sources */,
 				5F0C309D1617ACDF0098F2B8 /* BWVenueListViewController.m in Sources */,
 				5F3D3E211896C65E00023B86 /* BWAPIManager.m in Sources */,
+				5F56FE6A1936E0F300C99CD9 /* UIView+FrameAccessor.m in Sources */,
+				5F56FE661935917400C99CD9 /* JCButtonBar.m in Sources */,
 				5F0C30A91617C71A0098F2B8 /* BWMainViewController.m in Sources */,
 				5F0C359B161812E40098F2B8 /* BWVenue.m in Sources */,
 				5F3D3E2818981C6D00023B86 /* BWDataStore.m in Sources */,
